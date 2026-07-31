@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Móveis Rangel Store</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="shortcut icon" href="favicon.png" type="image/png">
+</head>
+
+<body>
+    <main>
+        <h1>Bem Vindo ao Estoque!</h1>
+
+        <div id="form-area">
+            <form action="" id="form_estoque">
+                <label for="item_name">Item: </label>
+                <input required type="text" id="item_name" placeholder="Nome do item">
+                <label for="item_qtd">Quantidade: </label>
+                <input required type="number" id="item_qtd" placeholder="1">
+                <label for="item_descript">Descrição:</label>
+                <input required type="text" id="item_descript" placeholder="Descrição">
+                <button id='button_submit' type="submit">Enviar</button>
+            </form>
+            <h2>Esta é sua lista atual de materiais:</h2>
+            <section id="lista_area">
+                <ul id="estoque_lista">
+
+                </ul>
+            </section>
+        </div>
+    </main>
+
+    <script src="scripts/script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,24 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body{
+    height: 250vh;
+    overflow: hidden;
+}
+
+main{
+    align-items: center;
+    text-align: center;
+}
+
+#form-area{
+    margin: auto;
+    position: absolute;
+    margin-left: 450px;
+    border: black 2px solid;
+
+}
+
