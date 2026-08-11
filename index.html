@@ -4,14 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Móveis Rangel Store</title>
+    <title>Marcenaria Store</title>
     <link rel="stylesheet" href="styles/style.css">
-    <link rel="shortcut icon" href="favicon.png" type="image/png">
+    <link rel="shortcut icon" href="assets/favicon.png" type="image/png">
 </head>
 
 <body>
     <main>
-        <h1>Bem Vindo ao Estoque!</h1>
+        <h1 id="titulo">Bem Vindo ao Estoque!</h1>
 
         <div id="form-area">
             <form action="" id="form_estoque">
@@ -19,9 +19,10 @@
                 <input required type="text" id="item_name" placeholder="Nome do item">
                 <label for="item_qtd">Quantidade: </label>
                 <input required type="number" id="item_qtd" placeholder="1">
-                <label for="item_descript">Descrição:</label>
-                <input required type="text" id="item_descript" placeholder="Descrição">
+                <label for="item_desc">Descrição:</label>
+                <input required type="text" id="item_desc" placeholder="Descrição">
                 <button id='button_submit' type="submit">Enviar</button>
+                <button type="button" id="clearStorage">Limpar Banco</button>
             </form>
             <h2>Esta é sua lista atual de materiais:</h2>
             <section id="lista_area">
@@ -32,7 +33,7 @@
         </div>
     </main>
 
-    <script src="scripts/script.js"></script>
+    <script src="scripts/script2.js"></script>
 </body>
 
 </html>
