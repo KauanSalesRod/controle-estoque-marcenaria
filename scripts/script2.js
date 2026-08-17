@@ -1,9 +1,9 @@
-/* const usuarioLogado = localStorage.getItem("usuarioLogado")
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
-if (!usuarioLogado){
-    window.location.replace('login.html')
-}
- */
+const url = "https://krqiolnlbrdrgrhcjixt.supabase.co"
+const anon_key = "sb_publishable_Kgt84e0nO00Uhso8f81c9w_oEQbrjiM"
+const supabase = createClient(url, anon_key)
+let email = document.getElementById('user_email')
 let estoque = [];
 let input_name = document.getElementById("item_name");
 let input_quantidade = document.getElementById("item_qtd");
@@ -12,76 +12,114 @@ const button = document.getElementById("button_submit")
 const area_form = document.getElementById("form_estoque")
 const area_lista = document.getElementById("estoque_lista")
 let titulo = document.querySelector('h1')
-let indiceEdicao = null
+let idEdicao = null
 const buttonLimparBD = document.getElementById("clearStorage")
+const buttonLogOut = document.getElementById('btn_logout')
+const mensagemFeedback = document.getElementById('mensagem_feedback')
 
-carregarBancoDeDados()
-renderizarLista()
+async function inicializar() {
+    await verificarUsuario()
+    await carregarBancoDeDados()
+}
 
-area_form.addEventListener("submit", (event) => {
+inicializar()
+atualizarPerfil('Kauan Sales Rodrigues')
+const { data: { user } } = await supabase.auth.getUser()
+
+if (user && user.user_metadata) {
+    console.log("Nome do usuário:", user.user_metadata.nome)
+}
+
+
+area_form.addEventListener("submit", async (event) => {
     event.preventDefault() /* Evitar atualização automática da página ao enviar os dados do formulário */
 
-    let produto = capturarDadosFormulario(input_name, input_quantidade, input_desc)
+    let produto = capturarDadosFormulario()
     /* Cria uma variável que armazena o valor capturado dos inputs */
 
 
-    if (indiceEdicao !== null) {
-        produto = {
-            nome: estoque[indiceEdicao].nome,
-            quantidade: estoque[indiceEdicao].quantidade,
-            descricao: estoque[indiceEdicao].descricao
-        }
+    if (idEdicao !== null) {
+        const { error } = await supabase
+            .from('estoque')
+            .update(produto)
+            .eq('id', idEdicao)
 
-        estoque.splice(indiceEdicao, 1)
-        estoque.push(produto)
-        atualizarBancoDeDados()
-        carregarBancoDeDados()
+        if (error) {
+            exibirFeedback("Erro ao atualizar produto.", "erro")
+        }
+        else {
+            exibirFeedback("Produto atualizado com sucesso!", "sucesso")
+            idEdicao = null
+            button.textContent = 'Cadastrar' // Volta o texto original do botão
+        }
     }
 
     else {
-        salvarEstoque(produto)
-        atualizarBancoDeDados()
-        carregarBancoDeDados()
+        // --- MODO CRIAÇÃO (INSERT) ---
+        const { data: { user } } = await supabase.auth.getUser()
+        produto.user_id = user.id
+
+        const { error } = await salvarEstoque(produto)
+
+        if (error) {
+            console.error(error)
+            exibirFeedback("Erro ao cadastrar produto.", "erro")
+        } else {
+            exibirFeedback("Produto cadastrado com sucesso!", "sucesso")
+        }
+        input_name.value = ''
+        input_quantidade.value = ''
+        input_desc.value = ''
     }
-    renderizarLista()
-    input_desc.value = ''
-    input_name.value = ''
-    input_quantidade.value = ''
-    console.log(localStorage)
-    indiceEdicao = null
+    await carregarBancoDeDados()
+});
 
+async function atualizarPerfil(novoNome, novoEmail) {
+    const { data, error } = await supabase.auth.updateUser({
+        email: novoEmail,
+        data: {
+            nome: novoNome // Armazena dentro do objeto user_metadata
+        }
+    })
 
-})
+    if (error) {
+        console.error("Erro ao atualizar perfil:", error)
+        exibirFeedback("Erro ao atualizar dados.", "erro")
+        return
+    }
 
-
+    exibirFeedback("Dados atualizados com sucesso!", "sucesso")
+}
 
 function capturarDadosFormulario() {
-    const nome = input_name.value
-    const descricao = input_desc.value
-    const quantidade = input_quantidade.value
-
-    const produto = {
-        nome: nome,
-        quantidade: quantidade,
-        descricao: descricao
+    return {
+        nome: input_name.value,
+        quantidade: Number(input_quantidade.value), // <--- Converter para Número!
+        descricao: input_desc.value
     }
+}
 
+async function salvarEstoque(produto) {
+    const { data, error } = await supabase.from('estoque').insert([produto])
 
-    return produto
-};
-
-function salvarEstoque(produto) {
-    estoque.push(produto)
+    return { data, error }
 };
 
 function atualizarBancoDeDados() {
     localStorage.setItem('estoque_m', JSON.stringify(estoque))
 }
 
-function carregarBancoDeDados() {
-    let estoque_m = localStorage.getItem('estoque_m')
-
-    return estoque_m ? JSON.parse(estoque_m) : []
+async function carregarBancoDeDados() {
+    const { data, error } = await supabase
+        .from('estoque')
+        .select('*')
+    if (error) {
+        exibirFeedback("Erro ao carregar estoque.", 'erro')
+        return
+    }
+    estoque = data
+    await console.log(estoque)
+    await renderizarLista()
 };
 
 
@@ -98,8 +136,8 @@ function criarElemento(item, indice) {
     novoElemento.appendChild(removeButton)
     area_lista.appendChild(novoElemento)
 
-    removeButton.addEventListener('click', () => botaoExcluir(indice))
-    editButton.addEventListener('click', () => botaoEditar(indice))
+    removeButton.addEventListener('click', () => botaoExcluir(item.id))
+    editButton.addEventListener('click', () => preencherCamposEdicao(item))
 };
 
 function renderizarLista() {
@@ -107,26 +145,34 @@ function renderizarLista() {
 
     ul.textContent = ''
 
-    estoque.forEach((item, indice) => {
-        criarElemento(item, indice)
+    estoque.forEach((item) => {
+        criarElemento(item)
     });
 };
 
-function botaoExcluir(indice) {
-    estoque.splice(indice, 1)
-    renderizarLista()
-    atualizarBancoDeDados()
+async function botaoExcluir(id) {
+    const { error } = await supabase
+        .from('estoque')
+        .delete()
+        .eq('id', id)
+
+    if (error) {
+        exibirFeedback("Erro ao excluir produto.", "erro")
+        return
+    }
+
+    exibirFeedback("Produto removido com sucesso!", "sucesso")
+    await carregarBancoDeDados()
 }
 
-function botaoEditar(indice) {
 
-    input_name.value = estoque[indice].nome;
-    input_quantidade.value = estoque[indice].quantidade;
-    input_desc.value = estoque[indice].descricao;
+function preencherCamposEdicao(item) {
+    input_name.value = item.nome
+    input_quantidade.value = item.quantidade
+    input_desc.value = item.descricao
 
-    indiceEdicao = indice;
-
-    button.textContent = 'Salvar alteração';
+    idEdicao = item.id
+    button.textContent = 'Salvar alteração'
 }
 
 
@@ -136,3 +182,34 @@ buttonLimparBD.addEventListener('click', function () {
     renderizarLista()
 
 })
+
+async function verificarUsuario() {
+    const { data, error } = await supabase.auth.getUser()
+    if (error || !data.user) {
+        window.location.replace('login.html')
+    }
+
+    email.textContent = data.user.email;
+
+}
+
+buttonLogOut.addEventListener('click', async () => {
+    await supabase.auth.signOut()
+    exibirFeedback("Realizando LogOut...", 'sucesso')
+    setTimeout(() => {
+        window.location.href = 'login.html'
+    }, 1500)
+})
+
+function exibirFeedback(texto, tipo) {
+
+    mensagemFeedback.textContent = texto
+    if (tipo === 'erro') {
+        mensagemFeedback.style.background = '#d9534f' // Vermelho
+    } else if (tipo === 'sucesso') {
+        mensagemFeedback.style.background = '#5cb85c' // Verde
+        mensagemFeedback.style.color = '#fff'
+
+    }
+
+}

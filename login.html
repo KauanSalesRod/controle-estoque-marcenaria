@@ -1,24 +1,32 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Area De Login</title>
     <link rel="stylesheet" href="styles/style.css">
+    <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon">
 </head>
+
 <body>
     <main id='main-area'>
         <h1>Fazer Login</h1>
-        <form id="form-login" action="">
+        <form id="form-login" action="" autocomplete="off">
             <label for="email">Email:</label>
-            <input type="text" id="email" required>
+            <input type="email" placeholder="E-mail" id="email" required>
             <label for="senha">Senha:</label>
-            <input type="password" id="senha" required>
+            <input type="password" placeholder="Senha" id="senha" required>
             <button type="submit" id="submit-button">Login</button>
+            <p>Ainda não possui uma conta? <a href="">Clique Aqui!</a></p>
         </form>
+        <p id="mensagem_feedback"></p>
     </main>
 
-    <script type="module" src="loginScript.js"></script>
+    
+
+    <script type="module" src="scripts/loginScript.js"></script>
+
 </body>
 
 </html>
