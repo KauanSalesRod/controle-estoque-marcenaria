@@ -1,25 +1,62 @@
-# 📦 Controle de Estoque - Marcenaria
+# 📦 Gerenciamento de Estoque Fullstack (Supabase + JS)
 
-Aplicação web interativa para gerenciamento e controle de estoque de materiais de marcenaria. O sistema permite realizar todas as operações fundamentais de um CRUD (Criar, Ler, Atualizar e Deletar) com persistência de dados local no navegador.
+Uma aplicação web completa para controle e gerenciamento de estoque com autenticação de usuários em tempo real, persistência em nuvem e isolamento de dados por usuário.
+
+![Tecnologias](https://img.shields.io/badge/Stack-JavaScript%20%7C%20HTML5%20%7C%20CSS3%20%7C%20Supabase-blue)
 
 ---
 
 ## 🚀 Funcionalidades
 
-- [x] **Cadastro de Materiais:** Adição de novos itens com nome, quantidade e especificações.
-- [x] **Listagem em Tempo Real:** Exibição dinâmica de todos os produtos cadastrados no estoque.
-- [x] **Edição e Atualização:** Alteração de dados de itens já cadastrados sem perder o histórico.
-- [x] **Remoção de Itens:** Exclusão de materiais do sistema de forma simples.
-- [x] **Persistência de Dados:** Salvamento dos dados via `localStorage`, mantendo as informações mesmo após fechar ou recarregar a página.
-- [x] **Interface Responsiva:** Design moderno estilizado com gradientes, cantos suavizados e foco na usabilidade.
+- **🔐 Autenticação de Usuários:** Login, cadastro e logout gerenciados via Supabase Auth.
+- **🛡️ Segurança de Dados (RLS):** Cada usuário autenticado visualiza e gerencia exclusivamente os seus próprios itens em estoque.
+- **📝 Operações CRUD Completas:**
+  - **Create:** Cadastro de novos produtos com validação dos campos.
+  - **Read:** Listagem dinâmica atualizada em tempo real direto da nuvem.
+  - **Update:** Edição de nome, quantidade e descrição de itens existentes.
+  - **Delete:** Remoção instantânea de registros.
+- **💬 Feedback Dinâmico:** Mensagens visuais de status para ações de sucesso, falhas e logout.
 
 ---
 
 ## 🛠️ Tecnologias Utilizadas
 
-O projeto foi desenvolvido do zero utilizando tecnologias fundamentais da Web (Vanilla Web Stack):
+- **Frontend:** HTML5, CSS3, JavaScript (ES6+ / Modules)
+- **Backend as a Service (BaaS):** [Supabase](https://supabase.com/)
+  - Supabase Auth (Gerenciamento de Usuários)
+  - PostgreSQL Database
+  - Row Level Security (RLS)
 
-- HTML5: Estruturação semântica e acessível do formulário e da lista de produtos.
-- CSS3: Estilização moderna utilizando **Flexbox**, animações de `hover`, gradientes e design responsivo.
-- JavaScript: Manipulação do DOM, funções com responsabilidade única, gerenciamento de estado e integração com a API de `localStorage`.
+---
 
+## ⚙️ Configuração do Banco de Dados (Supabase)
+
+Para rodar este projeto ou replicar a estrutura no seu próprio Supabase:
+
+1. Crie um projeto no [Supabase](https://supabase.com/).
+2. Vá ao **SQL Editor** no painel do Supabase.
+3. Copie e execute o script localizado no arquivo [`schema.sql`](./schema.sql) deste repositório para criar a tabela `estoque` e configurar as políticas de segurança (RLS).
+
+---
+
+## 🏃‍♂️ Como Executar o Projeto Localmente
+
+1. **Clone o repositório:**
+   ```bash
+   git clone [https://github.com/KauanSalesRod/controle-estoque-marcenaria]
+   ```
+
+2. **Acesse a pasta do projeto:**
+   ```bash
+   cd controle-estoque-marcenaria
+   ```
+
+3. **Abra o projeto:**
+   - Como o projeto utiliza ES Modules (`import/export`), abra o arquivo `index.html` (ou `login.html`) através de um servidor local como a extensão **Live Server** do VS Code.
+
+---
+
+## ✒️ Autor
+
+Desenvolvido por Kauan Sales Rodrigues 👋  
+Sinta-se à vontade para entrar em contato no [LinkedIn](https://www.linkedin.com/in/kauan-sales-rodrigues/?lipi=urn%3Ali%3Apage%3Ad_flagship3_feed%3BFVLyvh5tR6CiBc%2Bmr3%2FBag%3D%3D)!
