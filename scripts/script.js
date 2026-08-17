@@ -35,8 +35,6 @@ area_form.addEventListener("submit", async (event) => {
     event.preventDefault() /* Evitar atualização automática da página ao enviar os dados do formulário */
 
     let produto = capturarDadosFormulario()
-    /* Cria uma variável que armazena o valor capturado dos inputs */
-
 
     if (idEdicao !== null) {
         const { error } = await supabase
@@ -50,7 +48,7 @@ area_form.addEventListener("submit", async (event) => {
         else {
             exibirFeedback("Produto atualizado com sucesso!", "sucesso")
             idEdicao = null
-            button.textContent = 'Cadastrar' // Volta o texto original do botão
+            button.textContent = 'Cadastrar'
         }
     }
 
@@ -78,7 +76,7 @@ async function atualizarPerfil(novoNome, novoEmail) {
     const { data, error } = await supabase.auth.updateUser({
         email: novoEmail,
         data: {
-            nome: novoNome // Armazena dentro do objeto user_metadata
+            nome: novoNome
         }
     })
 
@@ -94,7 +92,7 @@ async function atualizarPerfil(novoNome, novoEmail) {
 function capturarDadosFormulario() {
     return {
         nome: input_name.value,
-        quantidade: Number(input_quantidade.value), // <--- Converter para Número!
+        quantidade: Number(input_quantidade.value),
         descricao: input_desc.value
     }
 }
@@ -205,10 +203,9 @@ function exibirFeedback(texto, tipo) {
 
     mensagemFeedback.textContent = texto
     if (tipo === 'erro') {
-        mensagemFeedback.style.background = '#d9534f' // Vermelho
+        mensagemFeedback.style.background = '#d9534f' 
     } else if (tipo === 'sucesso') {
-        mensagemFeedback.style.background = '#5cb85c' // Verde
-        mensagemFeedback.style.color = '#fff'
+        mensagemFeedback.style.background = '#5cb85c'
 
     }
 

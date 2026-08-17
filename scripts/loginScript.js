@@ -42,9 +42,9 @@ function exibirFeedback(texto, tipo) {
 
     mensagemFeedback.textContent = texto
     if (tipo === 'erro') {
-        mensagemFeedback.style.background = '#d9534f' // Vermelho
+        mensagemFeedback.style.background = '#d9534f' 
     } else if (tipo === 'sucesso') {
-        mensagemFeedback.style.background = '#5cb85c' // Verde
+        mensagemFeedback.style.background = '#5cb85c' 
     }
 
 }})
